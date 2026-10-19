@@ -1,0 +1,20 @@
+/* Estilos adicionales para colores - Cementerio Montes de Paz */
+h1 {
+    color: #1a3a2e;
+}
+
+h2 {
+    color: #2d5a3e;
+}
+
+h3 {
+    color: #c9a84c;
+}
+
+h4 {
+    color: rgba(26, 58, 46, 0.7);
+}
+
+h5 {
+    color: hsl(140, 40%, 30%);
+}

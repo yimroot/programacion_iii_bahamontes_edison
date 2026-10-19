@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimedia - Cementerio Montes de Paz</title>
+    <meta name="description" content="Tour virtual 360°, himno institucional, testimonios en video y galería multimedia del Cementerio Montes de Paz. Experiencia inmersiva desde su dispositivo.">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --mp11-green: #1a3a2e; --mp11-green-light: #2d5a3e; --mp11-gold: #c9a84c; --mp11-cream: #f5f0e8; --mp11-white: #fff; --mp11-dark: #1a1a1a; --mp11-text: #2d2d2d; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--mp11-cream); color: var(--mp11-text); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        a { color: var(--mp11-green); }
+        a:hover { color: var(--mp11-gold); }
+
+        .mp11-header { background: var(--mp11-dark); color: var(--mp11-cream); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .mp11-header-inner { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .mp11-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; font-weight: 700; font-size: 1.1rem; }
+        .mp11-logo-icon { width: 40px; height: 40px; background: var(--mp11-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .mp11-nav { display: flex; gap: 0.5rem; list-style: none; }
+        .mp11-nav a { padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+        .mp11-nav a:hover, .mp11-nav a[aria-current="page"] { background: var(--mp11-gold); color: var(--mp11-dark); }
+
+        .mp11-hero { background: linear-gradient(135deg, var(--mp11-green) 0%, var(--mp11-green-light) 100%); color: var(--mp11-cream); padding: 4rem 2rem; text-align: center; position: relative; overflow: hidden; }
+        .mp11-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(201,168,76,0.1) 0%, transparent 70%); }
+        .mp11-hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+        .mp11-hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+        .mp11-hero p { font-size: 1.15rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+        .mp11-main { flex: 1; max-width: 1300px; width: 100%; margin: 0 auto; padding: 3rem 2rem; }
+        .mp11-section { margin-bottom: 4rem; }
+        .mp11-section-header { text-align: center; margin-bottom: 2.5rem; }
+        .mp11-section-tag { display: inline-block; background: var(--mp11-green); color: var(--mp11-gold); padding: 0.375rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .mp11-section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); color: var(--mp11-green); font-weight: 700; margin-bottom: 0.75rem; }
+        .mp11-section-desc { color: #666; max-width: 600px; margin: 0 auto; font-size: 1.05rem; }
+
+        .mp11-video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; }
+        .mp11-video-card { background: var(--mp11-white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(26, 58, 46, 0.08); transition: transform 0.3s, box-shadow 0.3s; }
+        .mp11-video-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(26, 58, 46, 0.12); }
+        .mp11-video-wrapper { position: relative; aspect-ratio: 16/9; background: var(--mp11-dark); overflow: hidden; }
+        .mp11-video { width: 100%; height: 100%; object-fit: cover; background: var(--mp11-dark); }
+        .mp11-video-poster { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--mp11-cream); cursor: pointer; transition: opacity 0.3s; background: rgba(26, 58, 46, 0.8); }
+        .mp11-video-poster:hover { background: rgba(26, 58, 46, 0.95); }
+        .mp11-video-play { width: 72px; height: 72px; border-radius: 50%; background: var(--mp11-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--mp11-dark); margin-left: 4px; box-shadow: 0 4px 20px rgba(201, 168, 76, 0.4); transition: transform 0.2s, box-shadow 0.2s; }
+        .mp11-video-poster:hover .mp11-video-play { transform: scale(1.1); box-shadow: 0 8px 30px rgba(201, 168, 76, 0.6); }
+        .mp11-video-poster.hidden { opacity: 0; pointer-events: none; }
+        .mp11-video-info { padding: 1.25rem; }
+        .mp11-video-title { font-size: 1.1rem; font-weight: 600; color: var(--mp11-green); margin-bottom: 0.5rem; }
+        .mp11-video-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--mp11-text-light); flex-wrap: wrap; }
+        .mp11-video-meta span { display: flex; align-items: center; gap: 0.35rem; }
+        .mp11-video-actions { display: flex; gap: 0.5rem; padding: 0 1.25rem 1.25rem; flex-wrap: wrap; }
+        .mp11-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
+        .mp11-btn-primary { background: var(--mp11-green); color: var(--mp11-cream); }
+        .mp11-btn-primary:hover { background: var(--mp11-green-light); }
+        .mp11-btn-gold { background: var(--mp11-gold); color: var(--mp11-dark); }
+        .mp11-btn-gold:hover { background: #b8963d; }
+        .mp11-btn-outline { background: transparent; border: 1px solid var(--mp11-border); color: var(--mp11-text); }
+        .mp11-btn-outline:hover { background: var(--mp11-cream); border-color: var(--mp11-green); color: var(--mp11-green); }
+
+        .mp11-audio-section { background: var(--mp11-white); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(26, 58, 46, 0.08); }
+        .mp11-audio-player { background: linear-gradient(135deg, var(--mp11-green) 0%, var(--mp11-green-light) 100%); border-radius: 12px; padding: 2rem; color: var(--mp11-cream); margin-bottom: 2rem; }
+        .mp11-audio-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .mp11-audio-cover { width: 80px; height: 80px; border-radius: 12px; background: var(--mp11-gold); display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3); }
+        .mp11-audio-title h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .mp11-audio-title p { opacity: 0.8; font-size: 0.9rem; }
+        .mp11-audio-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; width: 100%; }
+        .mp11-audio-btn { background: rgba(255,255,255,0.15); border: none; color: var(--mp11-cream); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+        .mp11-audio-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+        .mp11-audio-btn:active { transform: scale(0.95); }
+        .mp11-audio-btn:focus-visible { outline: 2px solid var(--mp11-gold); outline-offset: 2px; }
+        .mp11-progress-container { flex: 1; min-width: 200px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; cursor: pointer; position: relative; }
+        .mp11-progress-bar { height: 100%; background: var(--mp11-gold); border-radius: 3px; width: 0%; transition: width 0.1s linear; }
+        .mp11-progress-buffer { position: absolute; top: 0; left: 0; height: 100%; background: rgba(255,255,255,0.1); border-radius: 3px; width: 0%; pointer-events: none; }
+        .mp11-time { font-variant-numeric: tabular-nums; font-size: 0.85rem; opacity: 0.8; min-width: 90px; text-align: right; }
+        .mp11-volume { display: flex; align-items: center; gap: 0.5rem; }
+        .mp11-volume-slider { width: 80px; height: 4px; -webkit-appearance: none; appearance: none; background: rgba(255,255,255,0.2); border-radius: 2px; cursor: pointer; }
+        .mp11-volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--mp11-gold); border-radius: 50%; cursor: pointer; }
+        .mp11-volume-slider::-moz-range-thumb { width: 14px; height: 14px; background: var(--mp11-gold); border: none; border-radius: 50%; cursor: pointer; }
+        .mp11-speed-select { background: rgba(255,255,255,0.15); border: none; color: var(--mp11-cream); padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+        .mp11-audio-chapters { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .mp11-chapter { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; cursor: pointer; transition: color 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .mp11-chapter:last-child { border-bottom: none; }
+        .mp11-chapter:hover { color: var(--mp11-gold); }
+        .mp11-chapter-title { font-size: 0.9rem; }
+        .mp11-chapter-time { font-variant-numeric: tabular-nums; font-size: 0.8rem; opacity: 0.6; }
+
+        .mp11-audio-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .mp11-audio-item { background: var(--mp11-cream); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .mp11-audio-item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(26, 58, 46, 0.1); }
+        .mp11-audio-item-icon { width: 56px; height: 56px; border-radius: 10px; background: var(--mp11-green); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--mp11-cream); flex-shrink: 0; }
+        .mp11-audio-item-info { flex: 1; min-width: 0; }
+        .mp11-audio-item-title { font-weight: 600; color: var(--mp11-green); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mp11-audio-item-desc { font-size: 0.8rem; color: var(--mp11-text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mp11-audio-item-btn { background: var(--mp11-gold); color: var(--mp11-dark); border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+        .mp11-audio-item-btn:hover { background: #b8963d; }
+
+        .mp11-tour-section { background: var(--mp11-white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(26, 58, 46, 0.08); }
+        .mp11-tour-header { background: linear-gradient(135deg, var(--mp11-green) 0%, var(--mp11-green-light) 100%); color: var(--mp11-cream); padding: 2rem; text-align: center; }
+        .mp11-tour-header h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .mp11-tour-header p { opacity: 0.8; }
+        .mp11-tour-viewer { aspect-ratio: 16/9; background: var(--mp11-dark); position: relative; overflow: hidden; }
+        .mp11-tour-iframe { width: 100%; height: 100%; border: none; }
+        .mp11-tour-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--mp11-cream); text-align: center; padding: 2rem; }
+        .mp11-tour-placeholder-icon { font-size: 4rem; opacity: 0.5; }
+        .mp11-tour-controls { padding: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: var(--mp11-cream); border-top: 1px solid var(--mp11-border); }
+        .mp11-tour-btn { background: var(--mp11-white); border: 1px solid var(--mp11-border); color: var(--mp11-text); padding: 0.625rem 1.25rem; border-radius: 8px; font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .mp11-tour-btn:hover { border-color: var(--mp11-green); color: var(--mp11-green); background: var(--mp11-white); }
+        .mp11-tour-btn.active { background: var(--mp11-green); border-color: var(--mp11-green); color: var(--mp11-cream); }
+        .mp11-tour-info { padding: 1.5rem; border-top: 1px solid var(--mp11-border); }
+        .mp11-tour-info h4 { font-size: 1rem; color: var(--mp11-green); margin-bottom: 0.75rem; }
+        .mp11-tour-info p { color: var(--mp11-text-light); font-size: 0.9rem; line-height: 1.7; }
+
+        .mp11-testimonials-video { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .mp11-testimonial-video { background: var(--mp11-white); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(26, 58, 46, 0.08); }
+        .mp11-testimonial-header { background: var(--mp11-green); color: var(--mp11-cream); padding: 1.5rem; }
+        .mp11-testimonial-header h4 { font-size: 1rem; font-weight: 600; }
+        .mp11-testimonial-video-wrapper { aspect-ratio: 16/9; background: var(--mp11-dark); position: relative; }
+        .mp11-testimonial-video video { width: 100%; height: 100%; object-fit: cover; }
+        .mp11-testimonial-info { padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+        .mp11-testimonial-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--mp11-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--mp11-dark); flex-shrink: 0; }
+        .mp11-testimonial-name { font-weight: 600; color: var(--mp11-green); }
+        .mp11-testimonial-role { font-size: 0.8rem; color: var(--mp11-text-light); }
+
+        .mp11-footer { background: var(--mp11-dark); color: var(--mp11-cream); padding: 2rem; text-align: center; font-size: 0.85rem; opacity: 0.7; margin-top: auto; }
+
+        @media (max-width: 700px) {
+            .mp11-main { padding: 1.5rem 1rem; }
+            .mp11-video-grid { grid-template-columns: 1fr; }
+            .mp11-audio-header { flex-direction: column; text-align: center; }
+            .mp11-audio-controls { justify-content: center; }
+            .mp11-time { display: none; }
+            .mp11-tour-controls { flex-direction: column; align-items: center; }
+            .mp11-tour-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="mp11-header" role="banner">
+        <div class="mp11-header-inner">
+            <a href="/" class="mp11-logo" aria-label="Cementerio Montes de Paz - Inicio">
+                <span class="mp11-logo-icon" aria-hidden="true">🎬</span>
+                <span>Montes de Paz Multimedia</span>
+            </a>
+            <nav class="mp11-nav" aria-label="Navegación multimedia">
+                <a href="#tour" aria-current="page">Tour 360°</a>
+                <a href="#himno">Himno</a>
+                <a href="#videos">Videos</a>
+                <a href="#audios">Audios</a>
+                <a href="#testimonios">Testimonios</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="mp11-hero" aria-labelledby="hero-title">
+        <div class="mp11-hero-content">
+            <h1 id="hero-title">Experiencia Inmersiva Montes de Paz</h1>
+            <p>Recorra nuestras instalaciones en 360°, escuche nuestro himno institucional, vea testimonios de familias y descubra la serenidad de nuestro camposanto desde cualquier lugar.</p>
+        </div>
+    </section>
+
+    <main class="mp11-main" role="main">
+        <section id="tour" class="mp11-section mp11-tour-section" aria-labelledby="tour-title">
+            <header class="mp11-tour-header">
+                <h3 id="tour-title">Tour Virtual 360°</h3>
+                <p>Navegue por nuestros jardines, capillas y mausoleos como si estuviera ahí. Compatible con visores VR.</p>
+            </header>
+            <div class="mp11-tour-viewer">
+                <div class="mp11-tour-placeholder" id="mp11-tour-placeholder">
+                    <span class="mp11-tour-placeholder-icon">🏛️</span>
+                    <div>
+                        <strong style="font-size: 1.25rem;">Tour Virtual 360°</strong>
+                        <p style="margin-top: 0.5rem; opacity: 0.7;">Seleccione una ubicación abajo para cargar el tour interactivo</p>
+                    </div>
+                </div>
+                <iframe class="mp11-tour-iframe" id="mp11-tour-iframe" src="" title="Tour virtual 360° del Cementerio Montes de Paz" allow="fullscreen; xr-spatial-tracking" loading="lazy" style="display: none;"></iframe>
+            </div>
+            <div class="mp11-tour-controls" role="tablist" aria-label="Seleccionar ubicación del tour">
+                <button class="mp11-tour-btn active" role="tab" aria-selected="true" aria-controls="panel-entrada" data-src="https://my.matterport.com/show/?m=example1" data-title="Entrada Principal y Avenida de Cipreses">🏛️ Entrada Principal</button>
+                <button class="mp11-tour-btn" role="tab" aria-selected="false" aria-controls="panel-capilla" data-src="https://my.matterport.com/show/?m=example2" data-title="Capilla Principal Interior">⛪ Capilla Principal</button>
+                <button class="mp11-tour-btn" role="tab" aria-selected="false" aria-controls="panel-jardines" data-src="https://my.matterport.com/show/?m=example3" data-title="Jardines de la Paz">🌿 Jardines de la Paz</button>
+                <button class="mp11-tour-btn" role="tab" aria-selected="false" aria-controls="panel-mausoleos" data-src="https://my.matterport.com/show/?m=example4" data-title="Mausoleos Familiares">🏛️ Mausoleos</button>
+                <button class="mp11-tour-btn" role="tab" aria-selected="false" aria-controls="panel-velacion" data-src="https://my.matterport.com/show/?m=example5" data-title="Salas de Velación">🏠 Salas de Velación</button>
+                <button class="mp11-tour-btn" role="tab" aria-selected="false" aria-controls="panel-columbario" data-src="https://my.matterport.com/show/?m=example6" data-title="Columbario Horizonte">🪟 Columbario Nuevo</button>
+            </div>
+            <div class="mp11-tour-info">
+                <h4>¿Cómo usar el tour?</h4>
+                <p>Haga clic y arrastre para rotar la vista 360°. Use la rueda del mouse o pellizque en móvil para hacer zoom. Los puntos blancos <strong>•</strong> navegan entre ubicaciones. El icono <strong>🕶️</strong> activa modo VR (requiere visor compatible). Para mejor experiencia, use pantalla completa.</p>
+            </div>
+        </section>
+
+        <section id="himno" class="mp11-section mp11-audio-section" aria-labelledby="himno-title">
+            <header class="mp11-section-header">
+                <span class="mp11-section-tag">Audio Principal</span>
+                <h2 id="himno-title" class="mp11-section-title">Himno Institucional</h2>
+                <p class="mp11-section-desc">Compuesto para el 75° aniversario. Letra: Eduardo Bahamontes | Música: Orquesta Sinfónica de Quito</p>
+            </header>
+
+            <div class="mp11-audio-player" role="region" aria-label="Reproductor del himno institucional">
+                <div class="mp11-audio-header">
+                    <div class="mp11-audio-cover" aria-hidden="true">🎵</div>
+                    <div class="mp11-audio-title">
+                        <h3>Himno del Cementerio Montes de Paz</h3>
+                        <p>Versión oficial 2025 • Duración: 2:47</p>
+                    </div>
+                </div>
+                <div class="mp11-audio-controls">
+                    <button class="mp11-audio-btn" id="mp11-play-btn" aria-label="Reproducir" aria-pressed="false">▶</button>
+                    <button class="mp11-audio-btn" id="mp11-pause-btn" aria-label="Pausar" aria-pressed="false" style="display:none;">⏸</button>
+                    <button class="mp11-audio-btn" id="mp11-stop-btn" aria-label="Detener">⏹</button>
+                    <button class="mp11-audio-btn" id="mp11-restart-btn" aria-label="Reiniciar">⏮</button>
+                    <div class="mp11-progress-container" id="mp11-progress-container" role="slider" aria-label="Progreso de reproducción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                        <div class="mp11-progress-bar" id="mp11-progress-bar"></div>
+                        <div class="mp11-progress-buffer" id="mp11-progress-buffer"></div>
+                    </div>
+                    <span class="mp11-time" id="mp11-current-time">0:00</span>
+                    <span class="mp11-time" id="mp11-duration">2:47</span>
+                    <div class="mp11-volume">
+                        <button class="mp11-audio-btn" id="mp11-mute-btn" aria-label="Silenciar" aria-pressed="false">🔊</button>
+                        <input type="range" class="mp11-volume-slider" id="mp11-volume-slider" min="0" max="1" step="0.1" value="0.8" aria-label="Volumen">
+                    </div>
+                    <select class="mp11-speed-select" id="mp11-speed-select" aria-label="Velocidad de reproducción">
+                        <option value="0.5">0.5×</option>
+                        <option value="0.75">0.75×</option>
+                        <option value="1" selected>1×</option>
+                        <option value="1.25">1.25×</option>
+                        <option value="1.5">1.5×</option>
+                        <option value="2">2×</option>
+                    </select>
+                </div>
+                <audio id="mp11-himno-audio" preload="metadata" crossorigin="anonymous">
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                    <source src="https://www.soundhelix.com/examples/ogg/SoundHelix-Song-1.ogg" type="audio/ogg">
+                    Su navegador no soporta audio HTML5.
+                </audio>
+                <track kind="chapters" src="himno-chapters.vtt" srclang="es" label="Capítulos" default>
+
+                <div class="mp11-audio-chapters" role="navigation" aria-label="Capítulos del himno">
+                    <div class="mp11-chapter" data-time="0"><span class="mp11-chapter-title">Introducción instrumental</span><span class="mp11-chapter-time">0:00</span></div>
+                    <div class="mp11-chapter" data-time="15"><span class="mp11-chapter-title">Verso 1: Fundadores y visión</span><span class="mp11-chapter-time">0:15</span></div>
+                    <div class="mp11-chapter" data-time="45"><span class="mp11-chapter-title">Coro: Montes de Paz eterno</span><span class="mp11-chapter-time">0:45</span></div>
+                    <div class="mp11-chapter" data-time="75"><span class="mp11-chapter-title">Verso 2: Jardines y capillas</span><span class="mp11-chapter-time">1:15</span></div>
+                    <div class="mp11-chapter" data-time="105"><span class="mp11-chapter-title">Coro final</span><span class="mp11-chapter-time">1:45</span></div>
+                    <div class="mp11-chapter" data-time="135"><span class="mp11-chapter-title">Coda instrumental</span><span class="mp11-chapter-time">2:15</span></div>
+                </div>
+            </div>
+
+            <h3 style="font-size: 1.1rem; color: var(--mp11-green); margin-bottom: 1rem;">Otros audios institucionales</h3>
+            <div class="mp11-audio-list">
+                <article class="mp11-audio-item">
+                    <div class="mp11-audio-item-icon">🎙️</div>
+                    <div class="mp11-audio-item-info">
+                        <div class="mp11-audio-item-title">Mensaje del Administrador</div>
+                        <div class="mp11-audio-item-desc">Edison Bahamontes - 75 aniversario</div>
+                    </div>
+                    <button class="mp11-audio-item-btn" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Reproducir</button>
+                </article>
+                <article class="mp11-audio-item">
+                    <div class="mp11-audio-item-icon">🙏</div>
+                    <div class="mp11-audio-item-info">
+                        <div class="mp11-audio-item-title">Oración por los Difuntos</div>
+                        <div class="mp11-audio-item-desc">Versión capellán oficial - 3:12</div>
+                    </div>
+                    <button class="mp11-audio-item-btn" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Reproducir</button>
+                </article>
+                <article class="mp11-audio-item">
+                    <div class="mp11-audio-item-icon">📖</div>
+                    <div class="mp11-audio-item-info">
+                        <div class="mp11-audio-item-title">Historia Oral del Camposanto</div>
+                        <div class="mp11-audio-item-desc">Relatos fundadores - 12:30</div>
+                    </div>
+                    <button class="mp11-audio-item-btn" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Reproducir</button>
+                </article>
+                <article class="mp11-audio-item">
+                    <div class="mp11-audio-item-icon">🎶</div>
+                    <div class="mp11-audio-item-info">
+                        <div class="mp11-audio-item-title">Música Ambiental Capilla</div>
+                        <div class="mp11-audio-item-desc">Para velaciones y meditación - Loop</div>
+                    </div>
+                    <button class="mp11-audio-item-btn" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Reproducir</button>
+                </article>
+            </div>
+        </section>
+
+        <section id="videos" class="mp11-section" aria-labelledby="videos-title">
+            <header class="mp11-section-header">
+                <span class="mp11-section-tag">Videoteca</span>
+                <h2 id="videos-title" class="mp11-section-title">Videos Institucionales</h2>
+                <p class="mp11-section-desc">Documentales, recorridos guiados y presentaciones de servicios producidos por nuestro equipo.</p>
+            </header>
+            <div class="mp11-video-grid">
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-1" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-1">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir tour institucional</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Documental: 75 Años de Historia</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 12:34</span>
+                            <span>📅 Ene 2025</span>
+                            <span>👁️ 15.2K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-1">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                        <button class="mp11-btn mp11-btn-outline">Descargar</button>
+                    </div>
+                </article>
+
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-2" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-2">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir presentación</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Presentación: Planes de Previsión 2025</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 8:15</span>
+                            <span>📅 Mar 2025</span>
+                            <span>👁️ 8.7K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-2">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                    </div>
+                </article>
+
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-3" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-3">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir guía</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Guía: Trámites y Documentos Necesarios</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 5:42</span>
+                            <span>📅 Feb 2025</span>
+                            <span>👁️ 23.1K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-3">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                    </div>
+                </article>
+
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-4" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-4">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir recorrido</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Recorrido: Nuevo Columbario Horizonte</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 6:20</span>
+                            <span>📅 Abr 2025</span>
+                            <span>👁️ 5.4K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-4">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                    </div>
+                </article>
+
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-5" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-5">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir testimonio</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Testimonio: Familia Rodríguez - Plan Familiar</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 4:18</span>
+                            <span>📅 May 2025</span>
+                            <span>👁️ 12.8K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-5">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                    </div>
+                </article>
+
+                <article class="mp11-video-card">
+                    <div class="mp11-video-wrapper">
+                        <video class="mp11-video" id="mp11-video-6" preload="metadata" crossorigin="anonymous" playsinline>
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4">
+                        </video>
+                        <div class="mp11-video-poster" data-video="mp11-video-6">
+                            <span class="mp11-video-play" aria-hidden="true">▶</span>
+                            <span style="font-size: 0.85rem; opacity: 0.8;">Reproducir ceremonia</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-info">
+                        <h3 class="mp11-video-title">Ceremonia: Inauguración Jardín de la Esperanza</h3>
+                        <div class="mp11-video-meta">
+                            <span>⏱️ 15:00</span>
+                            <span>📅 Jun 2025</span>
+                            <span>👁️ 3.2K</span>
+                        </div>
+                    </div>
+                    <div class="mp11-video-actions">
+                        <button class="mp11-btn mp11-btn-primary" data-video="mp11-video-6">Ver completo</button>
+                        <button class="mp11-btn mp11-btn-outline">Compartir</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="testimonios" class="mp11-section" aria-labelledby="testimonios-title">
+            <header class="mp11-section-header">
+                <span class="mp11-section-tag">Testimonios en Video</span>
+                <h2 id="testimonios-title" class="mp11-section-title">Familias Comparten su Experiencia</h2>
+                <p class="mp11-section-desc">Historias reales de quienes confiaron en Montes de Paz. Grabados con autorización expresa.</p>
+            </header>
+            <div class="mp11-testimonials-video">
+                <article class="mp11-testimonial-video">
+                    <div class="mp11-testimonial-video-wrapper">
+                        <video preload="metadata" crossorigin="anonymous" playsinline controls controlslist="nodownload noremoteplayback">
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4" type="video/mp4">
+                            <track kind="subtitles" src="testimonio-rodriguez-es.vtt" srclang="es" label="Español" default>
+                            <track kind="subtitles" src="testimonio-rodriguez-en.vtt" srclang="en" label="English">
+                        </video>
+                    </div>
+                    <div class="mp11-testimonial-info">
+                        <div class="mp11-testimonial-avatar" aria-hidden="true">MR</div>
+                        <div>
+                            <div class="mp11-testimonial-name">María Rodríguez</div>
+                            <div class="mp11-testimonial-role">Quito • Plan Familiar 2023</div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="mp11-testimonial-video">
+                    <div class="mp11-testimonial-video-wrapper">
+                        <video preload="metadata" crossorigin="anonymous" playsinline controls controlslist="nodownload noremoteplayback">
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+                            <track kind="subtitles" src="testimonio-cordova-es.vtt" srclang="es" label="Español" default>
+                        </video>
+                    </div>
+                    <div class="mp11-testimonial-info">
+                        <div class="mp11-testimonial-avatar" aria-hidden="true">JC</div>
+                        <div>
+                            <div class="mp11-testimonial-name">Jorge Córdova</div>
+                            <div class="mp11-testimonial-role">Guayaquil • Repatriación 2024</div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="mp11-testimonial-video">
+                    <div class="mp11-testimonial-video-wrapper">
+                        <video preload="metadata" crossorigin="anonymous" playsinline controls controlslist="nodownload noremoteplayback">
+                            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4" type="video/mp4">
+                            <track kind="subtitles" src="testimonio-vega-es.vtt" srclang="es" label="Español" default>
+                        </video>
+                    </div>
+                    <div class="mp11-testimonial-info">
+                        <div class="mp11-testimonial-avatar" aria-hidden="true">AL</div>
+                        <div>
+                            <div class="mp11-testimonial-name">Ana Lucía Vega</div>
+                            <div class="mp11-testimonial-role">Cuenca • Cremación 2024</div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mp11-footer" role="contentinfo">
+        <p>&copy; 2025 Cementerio Montes de Paz | Contenido multimedia protegido por derechos de autor | Edison Bahamontes, Administrador</p>
+    </footer>
+
+    <script>
+        (function() {
+            const audio = document.getElementById('mp11-himno-audio');
+            const playBtn = document.getElementById('mp11-play-btn');
+            const pauseBtn = document.getElementById('mp11-pause-btn');
+            const stopBtn = document.getElementById('mp11-stop-btn');
+            const restartBtn = document.getElementById('mp11-restart-btn');
+            const progressBar = document.getElementById('mp11-progress-bar');
+            const progressBuffer = document.getElementById('mp11-progress-buffer');
+            const progressContainer = document.getElementById('mp11-progress-container');
+            const currentTimeEl = document.getElementById('mp11-current-time');
+            const muteBtn = document.getElementById('mp11-mute-btn');
+            const volumeSlider = document.getElementById('mp11-volume-slider');
+            const speedSelect = document.getElementById('mp11-speed-select');
+            const chapters = document.querySelectorAll('.mp11-chapter');
+
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            function updateProgress() {
+                const percent = (audio.currentTime / audio.duration) * 100 || 0;
+                progressBar.style.width = percent + '%';
+                progressContainer.setAttribute('aria-valuenow', Math.round(percent));
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+
+            function updateBuffer() {
+                if (audio.buffered.length > 0) {
+                    const bufferedEnd = audio.buffered.end(audio.buffered.length - 1);
+                    const percent = (bufferedEnd / audio.duration) * 100 || 0;
+                    progressBuffer.style.width = percent + '%';
+                }
+            }
+
+            playBtn.addEventListener('click', () => {
+                audio.play().catch(() => {});
+                playBtn.style.display = 'none';
+                pauseBtn.style.display = 'flex';
+                playBtn.setAttribute('aria-pressed', 'false');
+                pauseBtn.setAttribute('aria-pressed', 'true');
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                audio.pause();
+                pauseBtn.style.display = 'none';
+                playBtn.style.display = 'flex';
+                playBtn.setAttribute('aria-pressed', 'true');
+                pauseBtn.setAttribute('aria-pressed', 'false');
+            });
+
+            stopBtn.addEventListener('click', () => {
+                audio.pause();
+                audio.currentTime = 0;
+                playBtn.style.display = 'flex';
+                pauseBtn.style.display = 'none';
+                playBtn.setAttribute('aria-pressed', 'true');
+                pauseBtn.setAttribute('aria-pressed', 'false');
+                updateProgress();
+            });
+
+            restartBtn.addEventListener('click', () => {
+                audio.currentTime = 0;
+                if (audio.paused) audio.play().catch(() => {});
+            });
+
+            progressContainer.addEventListener('click', e => {
+                const rect = progressContainer.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = percent * audio.duration;
+            });
+
+            progressContainer.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.currentTime + 5, audio.duration); }
+                if (e.key === 'ArrowLeft') { audio.currentTime = Math.max(audio.currentTime - 5, 0); }
+            });
+
+            muteBtn.addEventListener('click', () => {
+                audio.muted = !audio.muted;
+                muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+                muteBtn.setAttribute('aria-pressed', audio.muted);
+            });
+
+            volumeSlider.addEventListener('input', () => {
+                audio.volume = volumeSlider.value;
+                muteBtn.textContent = audio.volume === 0 ? '🔇' : '🔊';
+            });
+
+            speedSelect.addEventListener('change', () => {
+                audio.playbackRate = parseFloat(speedSelect.value);
+            });
+
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('progress', updateBuffer);
+            audio.addEventListener('loadedmetadata', () => {
+                document.getElementById('mp11-duration').textContent = formatTime(audio.duration);
+            });
+            audio.addEventListener('ended', () => {
+                playBtn.style.display = 'flex';
+                pauseBtn.style.display = 'none';
+                playBtn.setAttribute('aria-pressed', 'true');
+                pauseBtn.setAttribute('aria-pressed', 'false');
+            });
+            audio.addEventListener('play', () => {
+                playBtn.style.display = 'none';
+                pauseBtn.style.display = 'flex';
+            });
+            audio.addEventListener('pause', () => {
+                pauseBtn.style.display = 'none';
+                playBtn.style.display = 'flex';
+            });
+
+            chapters.forEach(chapter => {
+                chapter.addEventListener('click', () => {
+                    audio.currentTime = parseInt(chapter.dataset.time);
+                    if (audio.paused) audio.play().catch(() => {});
+                });
+                chapter.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chapter.click(); }
+                });
+                chapter.setAttribute('tabindex', '0');
+                chapter.setAttribute('role', 'button');
+            });
+
+            document.querySelectorAll('.mp11-audio-item-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    audio.src = btn.dataset.src;
+                    audio.load();
+                    audio.play().catch(() => {});
+                    document.querySelector('.mp11-audio-title h3').textContent = btn.closest('.mp11-audio-item').querySelector('.mp11-audio-item-title').textContent;
+                    document.querySelector('.mp11-audio-title p').textContent = btn.closest('.mp11-audio-item').querySelector('.mp11-audio-item-desc').textContent;
+                });
+            });
+
+            const videoCards = document.querySelectorAll('.mp11-video-card');
+            videoCards.forEach(card => {
+                const video = card.querySelector('.mp11-video');
+                const poster = card.querySelector('.mp11-video-poster');
+                const playBtn = card.querySelector('.mp11-btn-primary');
+
+                function playVideo() {
+                    video.play().catch(() => {});
+                    poster.classList.add('hidden');
+                    video.controls = true;
+                }
+
+                poster.addEventListener('click', playVideo);
+                poster.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playVideo(); } });
+                poster.setAttribute('tabindex', '0');
+                poster.setAttribute('role', 'button');
+                poster.setAttribute('aria-label', 'Reproducir video: ' + card.querySelector('.mp11-video-title').textContent);
+
+                playBtn.addEventListener('click', playVideo);
+
+                video.addEventListener('play', () => poster.classList.add('hidden'));
+                video.addEventListener('pause', () => {
+                    if (video.currentTime === 0 || video.ended) poster.classList.remove('hidden');
+                });
+                video.addEventListener('ended', () => {
+                    poster.classList.remove('hidden');
+                    video.controls = false;
+                });
+            });
+
+            const tourButtons = document.querySelectorAll('.mp11-tour-btn');
+            const tourIframe = document.getElementById('mp11-tour-iframe');
+            const tourPlaceholder = document.getElementById('mp11-tour-placeholder');
+
+            tourButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tourButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    tourIframe.src = btn.dataset.src;
+                    tourIframe.title = btn.dataset.title;
+                    tourIframe.style.display = 'block';
+                    tourPlaceholder.style.display = 'none';
+                });
+                btn.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+                });
+            });
+
+            const secondaryAudio = new Audio();
+            document.querySelectorAll('.mp11-audio-item-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (secondaryAudio.src === btn.dataset.src && !secondaryAudio.paused) {
+                        secondaryAudio.pause();
+                        btn.textContent = 'Reproducir';
+                    } else {
+                        secondaryAudio.src = btn.dataset.src;
+                        secondaryAudio.play().catch(() => {});
+                        document.querySelectorAll('.mp11-audio-item-btn').forEach(b => b.textContent = 'Reproducir');
+                        btn.textContent = 'Pausar';
+                    }
+                });
+            });
+            secondaryAudio.addEventListener('ended', () => {
+                document.querySelectorAll('.mp11-audio-item-btn').forEach(b => b.textContent = 'Reproducir');
+            });
+        })();
+    </script>
+</body>
+</html>
