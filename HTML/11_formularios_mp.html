@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de misiones</title>
+</head>
+
+<body>
+    <header>
+        <h1>Centro de Servicios Funerarios Montes de Paz</h1>
+        <p>Registro de solicitudes</p>
+    </header>
+    <hr>
+    <main>
+        <form action="#" method="get" id="registro-servicios">
+            <fieldset>
+                <legend>Información del Servicio</legend>
+                <label for="codigo">
+                    Código de solicitud:
+                </label>
+                <input type="text" id="codigo" name="codigo" placeholder="SOL-001" maxlength="10" required>
+                <br><br>
+                <label for="responsable">
+                    Familiar Responsable:
+                </label>
+                <select id="responsable" name="responsable" required>
+                    <option value="">
+                        Selecciona un familiar
+                    </option>
+                    <option value="conyuge">
+                        Cónyuge
+                    </option>
+                    <option value="hijo">
+                        Hijo/a
+                    </option>
+                    <option value="padre">
+                        Padre/Madre
+                    </option>
+                </select>
+                <br><br>
+                <label for="servicio">
+                    Tipo de Servicio:
+                </label>
+                <input type="text" id="servicio" name="servicio" placeholder="Ej. Inhumación, Cremación, Nichos" required>
+                <br><br>
+                <label for="fecha">
+                    Fecha del Servicio:
+                </label>
+                <input type="date" id="fecha" name="fecha" required>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Características</legend>
+                <p>Urgencia del servicio:</p>
+                <input type="radio" id="alta" name="urgencia" value="alta" required>
+                <label for="alta">Inmediato (24h)</label>
+                <input type="radio" id="media" name="urgencia" value="media">
+                <label for="media">Próximos 3 días</label>
+                <input type="radio" id="baja" name="urgencia" value="baja">
+                <label for="baja">Programado</label>
+                <br><br>
+                <label for="presupuesto">
+                    Presupuesto estimado (USD):
+                </label>
+                <input type="number" id="presupuesto" name="presupuesto" min="1000" max="50000" value="5000">
+                <p>Servicios adicionales:</p>
+                <input type="checkbox" id="flores" name="adicionales" value="flores">
+                <label for="flores">
+                    Arreglos Florales
+                </label>
+                <br>
+                <input type="checkbox" id="musica" name="adicionales" value="musica">
+                <label for="musica">
+                    Música / Coro
+                </label>
+                <br>
+                <input type="checkbox" id="transmision" name="adicionales" value="transmision">
+                <label for="transmision">
+                    Transmisión en vivo
+                </label>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Detalles del Servicio</legend>
+                <label for="descripcion">
+                    Observaciones:
+                </label>
+                <br>
+                <textarea id="descripcion" name="descripcion" rows="5" cols="45" maxlength="500"
+                    placeholder="Describe detalles, preferencias religiosas, instrucciones especiales..." required></textarea>
+            </fieldset>
+            <br>
+            <button type="submit">
+                Registrar Solicitud
+            </button>
+            <button type="reset">
+                Limpiar datos
+            </button>
+        </form>
+    </main>
+    <hr>
+    <footer>
+        <p>
+            <small>
+                Cementerio Montes de Paz - 2025
+            </small>
+        </p>
+    </footer>
+</body>
+
+</html>
